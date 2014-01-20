@@ -25,7 +25,7 @@ module.exports = function(app) {
             password: password
         });
 
-//检查用户名是否已经存在
+        //检查用户名是否已经存在.
         User.get(newUser.name, function(err, user) {
             if (user)
                 err = 'Username already exists.';
@@ -34,7 +34,7 @@ module.exports = function(app) {
                 console.log(util.inspect(err))
                 return res.redirect('/reg');
             }
-//如果不存在则新增用户
+            //如果不存在则新增用户
             newUser.save(function(err) {
                 if (err) {
                     req.session.error=err.toString();
