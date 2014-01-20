@@ -1,5 +1,6 @@
 var crypto = require('crypto');
 var User = require('../models/user');
+var util=require('util')
 module.exports = function(app) {
     app.get('/', function(req, res) {
         res.render('index', {
@@ -29,13 +30,15 @@ module.exports = function(app) {
             if (user)
                 err = 'Username already exists.';
             if (err) {
-                req.session.error=err;
+                req.session.error=err.toString();
+                console.log(util.inspect(err))
                 return res.redirect('/reg');
             }
 //如果不存在则新增用户
             newUser.save(function(err) {
                 if (err) {
-                    req.session.error=err;
+                    req.session.error=err.toString();
+                    console.log(util.inspect(err))
                     return res.redirect('/reg');
                 }
                 req.session.user = newUser;

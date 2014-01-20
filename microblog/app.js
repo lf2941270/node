@@ -42,6 +42,9 @@ app.use(function(req, res, next){
     res.locals.user=req.session.user;
     res.locals.error= req.session.error ? req.session.error : null;
     res.locals.success =req.session.success? req.session.success : null;
+
+    req.session.error=null;
+    req.session.success=null;
     next();
 });//locals
 
