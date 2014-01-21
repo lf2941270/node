@@ -34,9 +34,17 @@ app.use(express.session({
         db: settings.db
     })
 }));
+//app.helpers()
+var util = require('util');
+app.locals({
+    inspect: function(obj) {
+        return util.inspect(obj, true);
+    }
+});
 app.use(function(req, res, next){
     //res.locals.title = config['title']
     //res.locals.csrf = req.session ? req.session._csrf : '';
+    res.locals.headers=req.headers;
     res.locals.req = req;
     res.locals.session = req.session;
     res.locals.user=req.session.user;
