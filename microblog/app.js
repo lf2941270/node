@@ -23,13 +23,13 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(express.logger({stream: accessLogfile}));//访问日志
-app.configure('production', function(){
+/*app.configure('production', function(){
     app.error(function (err, req, res, next) {
         var meta = '[' + new Date() + '] ' + req.url + '\n';
         errorLogfile.write(meta + err.stack + '\n');
         next();
     });
-});
+});*/
 
 app.use(express.bodyParser());
 app.use(express.methodOverride());
