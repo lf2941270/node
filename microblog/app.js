@@ -2,6 +2,11 @@
 /**
  * Module dependencies.
  */
+//日志功能
+var fs = require('fs');
+var accessLogfile = fs.createWriteStream('access.log', {flags: 'a'});
+var errorLogfile = fs.createWriteStream('error.log', {flags: 'a'});
+
 var express = require('express');
 var routes = require('./routes');
 
@@ -16,6 +21,16 @@ var settings = require('./settings');
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+
+app.use(express.logger({stream: accessLogfile}));//访问日志
+app.configure('production', function(){
+    app.error(function (err, req, res, next) {
+        var meta = '[' + new Date() + '] ' + req.url + '\n';
+        errorLogfile.write(meta + err.stack + '\n');
+        next();
+    });
+});
+
 app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(express.cookieParser());
@@ -61,7 +76,6 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
-
+  console.log('Express server listening on port ' + app.get('port')+' in '+process.env.NODE_ENV+' mode');
 });
 routes(app);//额外加上
